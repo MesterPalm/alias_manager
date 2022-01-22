@@ -1,0 +1,10 @@
+[
+    {
+        "name": "gitdog",
+        "command": "git log --all --decorate --oneline --graph",
+        "description": "More visual git log. Git log a dog!",
+        "tags": [
+            "git"
+        ]
+    }
+]

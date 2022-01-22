@@ -1,0 +1,17 @@
+[package]
+name = "alias_manager"
+version = "0.1.0"
+authors = ["Viktor Palm <viktor.palm.vp@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "ali"
+path = "src/ali.rs"
+
+[[bin]]
+name = "load_aliases"
+path = "src/load_aliases.rs"
+
+[dependencies]
+json = ""
