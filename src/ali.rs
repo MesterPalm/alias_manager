@@ -111,6 +111,10 @@ fn main()
             }
         },
 
+        "write" => {
+            write_alias_file("definitions.sh", &alias_list);
+        },
+
         other => {
             println!("'{}' is not a valid command, try 'list', 'add', 'search' or 'remove'", other)
         }

@@ -183,14 +183,17 @@ pub fn write_json_file (file_name : &str, json_object : JsonValue) -> std::io::R
     return Ok(());
 }
 
-// ~~~ Other ~~~
-// ~~~~~~~~~~~~~
-
-pub fn activate_aliases (alias_list : &HashMap<&str, Entry>)
+pub fn write_alias_file (
+    file_name : &str, 
+    alias_list : &HashMap<&str, Entry>
+) -> std::io::Result<()>
 {
-    for (name, entry) in alias_list {
-        let alias = format!("{}=\"{}\"", entry.name, entry.command);
-        println!("{}",alias);
-        let a = Command::new("zsh alias").arg(alias).output().expect("lolxd");
+    let mut content : String = String::new();
+    for (_, entry) in alias_list {
+        content.push_str(
+            format!("alias {}=\"{}\"\n", entry.name, entry.command).as_str()
+            );
     }
+    fs::write(file_name, content)?;
+    return Ok(());
 }

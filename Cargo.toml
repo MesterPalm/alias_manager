@@ -9,9 +9,5 @@ edition = "2018"
 name = "ali"
 path = "src/ali.rs"
 
-[[bin]]
-name = "load_aliases"
-path = "src/load_aliases.rs"
-
 [dependencies]
 json = ""
