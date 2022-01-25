@@ -1,13 +1,29 @@
 pub mod lib;
 use lib::*;
+use std::path::PathBuf;
+use home::home_dir;
 
 fn main() 
 {   
-    // read the json file and parse it to a manageable format
+    // Read the json file and parse it to a manageable format
     let command = std::env::args().nth(1).expect("no command given, need atleast one argument");
-    let file_name = "test.json";
-    let alias_list = load_json_file(&file_name).expect("Unable to read the json file");
+
+    // Setup folders
+    let mut config_folder = home_dir().unwrap();
+    config_folder.push(".config/alias_manager/");
+    let mut alias_file = config_folder.clone(); 
+    alias_file.push("definitions.json");
+    let mut definition_file = config_folder.clone();  
+    definition_file.push("definitions.sh");
+
+    let alias_file = alias_file.to_str().unwrap();
+    let definition_file = definition_file.to_str().unwrap();
+
+    // Open definitions
+    let alias_list = load_json_file(&alias_file).expect("Unable to read the json file");
     let mut alias_list = unpack_alias_list(&alias_list).expect("Json file format invalid");
+
+
 
     // Handle arguments and select function
     match String::as_str(&command) {
@@ -75,8 +91,9 @@ fn main()
                 );
 
                 // save the new alias_list to file
-                let alias_list = pack_alias_list(&alias_list);
-                write_json_file(file_name, alias_list);
+                let packed_alias_list = pack_alias_list(&alias_list);
+                write_json_file(&alias_file, packed_alias_list);
+                write_alias_file(&definition_file, &alias_list);
             }
 
         },
@@ -101,18 +118,17 @@ fn main()
                 if yes_or_no == "y" {
                     println!("Confirmed. Deleting {}", entry.name);
                     alias_list.remove(entry.name);
-                    let alias_list = pack_alias_list(&alias_list);
-                    write_json_file(file_name, alias_list);
+
+                    // save the new alias_list to file
+                    let packed_alias_list = pack_alias_list(&alias_list);
+                    write_json_file(&alias_file, packed_alias_list);
+                    write_alias_file(&definition_file, &alias_list);
                 } else if (yes_or_no == "n") {
                     println!("Not deleting {}", entry.name);
                 }
             } else {
                 println!("No entry by the name given");
             }
-        },
-
-        "write" => {
-            write_alias_file("definitions.sh", &alias_list);
         },
 
         other => {

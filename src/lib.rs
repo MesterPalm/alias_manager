@@ -162,16 +162,13 @@ pub fn add_entry (
 // ~~~ IO-functionality ~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~
 
-pub fn load_json_file(file_name : &str) ->  Result<JsonValue>
+pub fn load_json_file(file_name : &str) ->  std::result::Result<JsonValue, Box<dyn std::error::Error>>
 { 
     /// Tries to load the file with the name given
     /// by file_name and returns error if it failed
     /// or the parsed JsonValue
-    if let Ok(file_contents) = fs::read_to_string(file_name) {
-        return json::parse(&file_contents);
-    } else {
-        return Result::Err(json::Error::FailedUtf8Parsing);
-    }
+    let file_contents =  fs::read_to_string(file_name)?;
+    return Ok(json::parse(&file_contents)?);
 }
 
 pub fn write_json_file (file_name : &str, json_object : JsonValue) -> std::io::Result<()>
