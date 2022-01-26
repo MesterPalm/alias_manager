@@ -188,7 +188,7 @@ pub fn write_alias_file (
     let mut content : String = String::new();
     for (_, entry) in alias_list {
         content.push_str(
-            format!("alias {}=\"{}\"\n", entry.name, entry.command).as_str()
+            format!("alias {}=\'{}\'\n", entry.name, entry.command).as_str()
             );
     }
     fs::write(file_name, content)?;
