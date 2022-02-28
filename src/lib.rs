@@ -187,10 +187,25 @@ pub fn write_alias_file (
 {
     let mut content : String = String::new();
     for (_, entry) in alias_list {
+        let command_parts = entry.command.split("'");
+        let command_len = command_parts.clone().count();
+        let mut escaped_command = String::new();
+        
+        if command_len % 2 != 1 {
+            panic!("Non closed ' in command");
+        }
+        for (i, part) in command_parts.enumerate() {
+            escaped_command += part;
+            if i < command_len-1 {
+                escaped_command += "'\"'\"'";
+            }
+        }
+
         content.push_str(
-            format!("alias {}=\'{}\'\n", entry.name, entry.command).as_str()
+            format!("alias {}=\'{}\'\n", entry.name, escaped_command).as_str()
             );
     }
     fs::write(file_name, content)?;
     return Ok(());
 }
+
